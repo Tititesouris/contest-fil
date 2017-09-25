@@ -6,7 +6,7 @@ startTime = time()
 # lists = []
 # for _ in range(n):
 #    lists.append([int(x) for x in input().split()])
-#'''
+'''
 n, k = [100, 10]
 lists = [
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -116,21 +116,21 @@ lists = [
     [3, 7, 7, 9, 18],
     [2, 4, 13, 13, 16]
 ]
-'''
+#'''
 list = []
-progress = [0 for i in range(n)]
-nonEmpty = [i for i in range(n)]
-while nonEmpty != []:
+nonEmpty = n
+while nonEmpty > 1:
     min = 20001
     minPos = -1
-    for i in nonEmpty:
-        if lists[i][progress[i]] < min:
-            min = lists[i][progress[i]]
+    for i in range(nonEmpty):
+        if lists[i][0] < min:
+            min = lists[i][0]
             minPos = i
-    list.append(min)
-    progress[minPos] += 1
-    if progress[minPos] >= k:
-        nonEmpty.remove(minPos)
+    list.append(lists[minPos].pop(0))
+    if len(lists[minPos]) == 0:
+        lists.pop(minPos)
+        nonEmpty -= 1
+list.extend(lists[0])
 
 print(" ".join(map(str, list)))
 
