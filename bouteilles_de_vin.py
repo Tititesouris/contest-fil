@@ -1,26 +1,22 @@
-# n = int(input())
-# bottles = [int(x) for x in input()]
+n = int(input())
+bottles = [int(x) for x in input().split()]
 
-bottles = [10, 5, 1, 1, 8, 2]
-n = len(bottles)
-
-outcomes = [
-    #[[2, 3, 5, 1], [3, 5, 1, 4]],
-    #[[2, 3, 5], [3, 5, 1], [3, 5, 1], [5, 1, 4]]
-]
-line = []
-for i in range(n):
-    newbottles = bottles
-    line.append([newbottles.pop(i) * n, newbottles])
-outcomes.append(line)
-
-bob = max(line[i], line[i+1]) + year *
+outcomes = [[[bottles[i] * n, [i]] for i in range(n)]]
 
 for year in range(n - 1, 0, -1):
     line = []
     for i in range(year):
-        newbottles = outcomes[0][i][1]
-        line.append([outcomes[0][i][0] + newbottles.pop(i), newbottles])
+        outcomeA = outcomes[0][i]
+        outcomeB = outcomes[0][i + 1]
+        toAddA = list(set(outcomeB[1]) - set(outcomeA[1]))[0]
+        toAddB = list(set(outcomeA[1]) - set(outcomeB[1]))[0]
+        a = outcomeA[0] + year * bottles[toAddA]
+        b = outcomeB[0] + year * bottles[toAddB]
+        if a >= b:
+            line.append([a, [toAddA] + outcomeA[1]])
+        else:
+            line.append([b, [toAddB] + outcomeB[1]])
+    outcomes.insert(0, line)
 
-
-print(outcomes)
+print(outcomes[0][0][0])
+# outcomes[0][0][1] is traceback
