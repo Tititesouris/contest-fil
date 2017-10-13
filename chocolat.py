@@ -1,4 +1,5 @@
 import sys
+
 sys.setrecursionlimit(1500)
 
 a, b, c, d = map(int, input().split())
@@ -38,25 +39,42 @@ def getVal(w, h, x, y):
     value = "[" + str(w) + " " + str(h) + " " + str(x) + " " + str(y) + "]"
     assert x < w and y < h
     if value not in values:
-        children = []
-        for i in range(1, w):
-            if i <= x:
-                children.append(getVal(w - i, h, x - i, y))
-            else:
-                children.append(getVal(i, h, x, y))
-        for j in range(1, h):
-            if j <= y:
-                children.append(getVal(w, h - j, x, y - j))
-            else:
-                children.append(getVal(w, j, x, y))
-        values.update({value: getParent(children)})
+        if w == h and w % 2 == 1 and (
+                    (x == 0 and y == h // 2) or (y == 0 and x == w // 2) or (x == w // 2 and y == h - 1) or (
+                y == h // 2 and x == w - 1)):
+            values.update({value: w})
+        else:
+            children = []
+            for i in range(1, w):
+                if i <= x:
+                    children.append(getVal(w - i, h, x - i, y))
+                else:
+                    children.append(getVal(i, h, x, y))
+            for j in range(1, h):
+                if j <= y:
+                    children.append(getVal(w, h - j, x, y - j))
+                else:
+                    children.append(getVal(w, j, x, y))
+            values.update({value: getParent(children)})
     return values[value]
+
 
 print(getVal(a, b, c, d))
 '''
-print("test")
-n = 7
+n = 11
 for i in range(n):
     for j in range(n):
-        print(getVal(n, n, i, j, {}))
+        values = {}
+        val = getVal(n, n, i, j)
+        if val == n:
+            print(n, n, i, j, val)
+
+
+10 7 7 3 = 11
+3 2 2 0 = 3
+100 100 50 50 = -198
+100 100 48 52 = 191
+
+Q6.
+
 '''
