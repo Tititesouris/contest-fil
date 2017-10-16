@@ -1,3 +1,40 @@
+'''
+Q1)
+        +3
+	+1		-2
+
+  	+1		+1
+		0
+
+Q2)
+si il y a au moins un succésseur négatif ou égal à 0 :
+	maximum(sucesseurs_négatifs)*-1 +1
+sinon :
+	(maximum(sucesseurs)+1)*-1
+
+Q3)
+
+Q4)
+100 100 50 50 = -198
+100 100 48 52 = 191
+
+Q5)
+Quand la tablette est carré et impair, alors la case centrale sur chaque bord (donc 4 en tout) ont la meme valeur que la largeur/hauteur de la tablette
+Pour n = 127: (127, 127, 0, 63), (127, 127, 63, 0), (127, 127, 126, 63), (127, 127, 63, 126) sont tous = 127
+
+Q6)
+
+Q7)
+Il s'agit de la même tablette, soit tournée soit réfléchie.
+
+Q8)
+Voir code en commentaire pour l'optimisation.
+
+Q9)
+Déjà fais à la question précédente
+
+'''
+
 import sys
 
 sys.setrecursionlimit(1500)
@@ -156,22 +193,3 @@ while not gameOver or player % 2 == 1:
     print()
 
 print("Game over YEAAAAH!")
-
-'''
-n = 11
-for i in range(n):
-    for j in range(n):
-        values = {}
-        val = getVal(n, n, i, j)
-        if val == n:
-            print(n, n, i, j, val)
-
-
-10 7 7 3 = 11
-3 2 2 0 = 3
-100 100 50 50 = -198
-100 100 48 52 = 191
-
-Q6.
-
-'''
