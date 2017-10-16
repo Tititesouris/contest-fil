@@ -81,33 +81,81 @@ def getVal(w, h, x, y):
             else:
                 val = (maxPos + 1) * -1
         else:
-            val = 1
+            val = 0
         values.update({value: {"value": val, "move": move, "result": result}})
         return val
     return values[value]["value"]
 
 
+def getNumberEnding(n):
+    if n == 1:
+        return "st"
+    if n == 2:
+        return "nd"
+    if n == 3:
+        return "rd"
+    return "th"
+
+
+def getWordEnding(n):
+    if n == 0 or n >= 2:
+        return "s"
+    return ""
+
+
 print("Calculating best moves...")
 getVal(a, b, c, d)
 gameOver = False
-while not gameOver:
+player = 0
+while not gameOver or player % 2 == 1:
     w, h, x, y = getMirrorRotation(a, b, c, d)
-    value = "[" + str(w) + " " + str(h) + " " + str(x) + " " + str(y) + "]"
+    value = "[" + str(a) + " " + str(b) + " " + str(c) + " " + str(d) + "]"
     print("Board:", value)
-    print("It's my turn... :thinking:")
-    val = values[value]
-    v = val["value"]
-    turnWin = abs(v) // 2 - 1
-    move = val["move"]
-    moveMax = max(move)
-    result = val["result"]
-    print("Splitting " + ("horizontally" if move[0] == 0 else "vertically") + " on the " + str(moveMax) + (
-        "st" if moveMax == 1 else "nd" if moveMax == 2 else "rd" if moveMax == 3 else "th") + " crease")
-    print("Looks like " + ("I" if v > 0 else "you") + ((" can win in " + str(turnWin) + " more turn" + ("s" if turnWin > 1 else "")) if turnWin > 0 else "'ve won!"))
-    print(v)
-    print(result)
-    break
-    gameOver = v == 0
+    print("Rotating/mirroring the board...")
+    value = "[" + str(w) + " " + str(h) + " " + str(x) + " " + str(y) + "]"
+
+    print("Board:", value)
+    if player % 2 == 0:
+        print("It's my turn... :thinking:")
+        val = values[value]
+        v = val["value"]
+        turnWin = (abs(v) - 1) // 2
+        move = val["move"]
+        moveMax = max(move)
+        result = val["result"]
+        if turnWin > 0:
+            print("Looks like " + ("I" if v > 0 else "you") + " can win in " + str(
+                turnWin) + " more turn" + getWordEnding(turnWin))
+        else:
+            print("Looks like " + ("I" if v > 0 else "you") + "'ve won!")
+            gameOver = True
+        print("Splitting " + ("horizontally" if move[0] == 0 else "vertically") + " on the " + str(
+            moveMax) + getNumberEnding(moveMax) + " crease")
+        a, b, c, d = result
+    else:
+        print("It's your turn, not that it matters anyway")
+        print("Type 'v N' to split vertically on the Nth crease, or 'h N' to split horizontally on the Nth crease")
+        m, n = input().split()
+        n = int(n)
+        print("Splitting " + ("vertically" if m == "v" else "horizontally") + " on the " + str(n) + getNumberEnding(
+            n) + " crease")
+        a, b, c, d = w, h, x, y
+        if m == "v":
+            if n <= x:
+                a = w - n
+                c = x - n
+            else:
+                a = n
+        else:
+            if n <= y:
+                b = h - n
+                d = y - n
+            else:
+                a = n
+    player += 1
+    print()
+
+print("Game over YEAAAAH!")
 
 '''
 n = 11
