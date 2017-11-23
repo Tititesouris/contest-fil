@@ -4,40 +4,53 @@ file = open("test.in", "r")
 fileOut = open("test.out", "w")
 getInput = file.readline
 # getInput = input
-m = int(getInput())
-n = int(getInput())
-jobs = []
-for _ in range(n):
-    jobs.append(list(map(int, getInput().split())))
+m = int(getInput())  # Number of machines
+n = int(getInput())  # Number of jobs
+jobs = []  # List of jobs
+for i in range(n):  # Each job is [arrivalTime, nbCPUNeeded, length, order]
+    jobs.append(list(map(int, (getInput() + " " + str(i)).split())))
 output = [0 for _ in range(n)]
 
-# Code starts here
-# order [1] from lowest to highest
-# order [2] from lowest to highest
-sortedJobs = []
+waitingJobs = []
+runningJobs = []
+freeCPUs = m
 
 
-def addToSort(item):
+def compareJobs(jobA, jobB):  # Heuristic
+    return (jobB[1] - jobA[1]) + (jobB[2] - jobA[2])
+
+
+def addWaitingJob(job):
     i = 0
-    while i < len(sortedJobs) and sortedJobs[i][0] < item[0]:
+    for waitingJob in waitingJobs:
+        if compareJobs(waitingJob, job) >= 0:
+            break
         i += 1
-    sortedJobs.insert(i, item)
+    waitingJobs.insert(i, job)
 
 
-i = 0
-for job in jobs:
-    ratio = job[2] / job[1]
-    addToSort([ratio, i])
-    i += 1
+time = 0
+while len(jobs) > 0 or len(waitingJobs) > 0 or len(runningJobs) > 0:
+    for i in range(len(jobs) - 1, -1, -1):
+        job = jobs[i]
+        if job[0] == time:  # Job arrived
+            addWaitingJob(jobs.pop(i))
 
-# SOLUTION \/\/\/\/
-# au fur et a mesure du temps, ajouter les job qui sont arrivés a priorityqueue. Trier priorityqueue en permanence selon une heuristique. puis quand il y a suffisemment de serveurs libres pour executer le premier job dans priorityqueue, alors le retirer et l'executer.
+    for i in range(len(waitingJobs) - 1, -1, -1):
+        waitingJob = waitingJobs[i]
+        if freeCPUs >= waitingJob[1]:
+            freeCPUs -= waitingJob[1]
+            output[waitingJob[3]] = time
+            print(output)
+            runningJobs.append(waitingJobs.pop(i))
 
-
-t = 0
-for sortedJob in sortedJobs:
-    t += jobs[sortedJob[1]][2]
-    output[sortedJob[1]] = t
+    for i in range(len(runningJobs) - 1, -1, -1):
+        runningJob = runningJobs[i]
+        runningJob[2] -= 1
+        if runningJob[2] <= 0:
+            freeCPUs += runningJob[1]
+            runningJobs.pop(i)
+    time += 1
 
 # Code ends here
 
