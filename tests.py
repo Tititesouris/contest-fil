@@ -1,27 +1,20 @@
-'''
-k = 2
-n = 2
-houses = [0, 4]
+m = 3
+grid = [
+    [1, 2, 0],
+    [1, 2, 0],
+    [1, 2, 0],
+]
 
 
-def f(houses, k):
-    a = 0
-    b = 0
-    r = int(n > 0)
-    for i in range(n):
-        if houses[b] - houses[a] <= 2 * k:
-            b += 1
-        else:
-            r += 1
-            a = b + 1
-            b = a
-    return r
-
-
-print(houses)
-print(f(houses, k))
-'''
-
-n = 3
-records = [12, 26, 19]
-print(sorted(records))
+def properties():
+    for y in range(m):
+        color = 0
+        count = False
+        for x in range(m):
+            if grid[y][x] != 0:
+                if color != grid[y][x]:
+                    return False
+                color = grid[y][x]
+                count = True
+        if not count:
+            return False
