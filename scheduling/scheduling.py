@@ -1,16 +1,23 @@
-from operator import itemgetter, attrgetter
-
-file = open("test.in", "r")
-fileOut = open("test.out", "w")
-getInput = file.readline
-# getInput = input
-m = int(getInput())  # Number of machines
-n = int(getInput())  # Number of jobs
+m = 0
+n = 0
 jobs = []  # List of jobs
-for i in range(n):  # Each job is [arrivalTime, nbCPUNeeded, length, order]
-    jobs.append(list(map(int, (getInput() + " " + str(i)).split())))
-output = [0 for _ in range(n)]
 
+
+def getInput():
+    global m, n, jobs
+    file = open("nancy.in", "r")
+    m = int(file.readline())  # Number of machines
+    n = int(file.readline())  # Number of jobs
+    jobs = []  # List of jobs
+    for i in range(n):  # Each job is [arrivalTime, nbCPUNeeded, length, order]
+        jobs.append(list(map(int, (file.readline() + " " + str(i)).split())))
+
+
+getInput()
+
+# Code starts here
+
+output = [0 for _ in range(n)]
 waitingJobs = []
 runningJobs = []
 freeCPUs = m
@@ -41,7 +48,6 @@ while len(jobs) > 0 or len(waitingJobs) > 0 or len(runningJobs) > 0:
         if freeCPUs >= waitingJob[1]:
             freeCPUs -= waitingJob[1]
             output[waitingJob[3]] = time
-            print(output)
             runningJobs.append(waitingJobs.pop(i))
 
     for i in range(len(runningJobs) - 1, -1, -1):
@@ -52,7 +58,13 @@ while len(jobs) > 0 or len(waitingJobs) > 0 or len(runningJobs) > 0:
             runningJobs.pop(i)
     time += 1
 
+
 # Code ends here
 
-for i in range(n):
-    fileOut.write(str(output[i]) + "\n")
+def setOutput():
+    fileOut = open("nancy.out", "w")
+    for i in range(n):
+        fileOut.write(str(output[i]) + "\n")
+
+
+setOutput()
